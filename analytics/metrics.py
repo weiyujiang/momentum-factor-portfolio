@@ -224,8 +224,8 @@ def calculate_information_ratio(portfolio_returns: pd.Series,
     excess = port_ret - bench_ret
 
     # Annualize
-    ann_excess = annualize_return(excess, 252)
-    tracking_error = annualize_volatility(excess, 252)
+    ann_excess = float(annualize_return(excess, 252))
+    tracking_error = float(annualize_volatility(excess, 252))
 
     if tracking_error == 0:
         return np.nan

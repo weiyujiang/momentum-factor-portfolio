@@ -54,7 +54,9 @@ def main():
     try:
         market_data = get_market_index(start=start_date, end=end_date)
         if len(market_data) > 0:
-            benchmark_prices = market_data['Adj Close'] if 'Adj Close' in market_data.columns else market_data['Close']
+            benchmark_prices = market_data['Close'] if 'Close' in market_data.columns else market_data.iloc[:, 0]
+            if isinstance(benchmark_prices, pd.DataFrame):
+                benchmark_prices = benchmark_prices.iloc[:, 0]
             benchmark_returns = benchmark_prices.pct_change()
             # Remove any duplicate index values
             benchmark_returns = benchmark_returns[~benchmark_returns.index.duplicated(keep='first')]

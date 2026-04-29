@@ -44,9 +44,10 @@ def get_vix_data(start: str, end: str, use_cache: bool = True) -> pd.DataFrame:
         vix = yf.download(MARKET_TICKERS['vix'], start=start, end=end, progress=False)
 
         if len(vix) > 0:
-            vix_data = pd.DataFrame({
-                'VIX': vix['Adj Close'] if 'Adj Close' in vix.columns else vix['Close']
-            })
+            col = vix['Close'] if 'Close' in vix.columns else vix.iloc[:, 0]
+            if isinstance(col, pd.DataFrame):
+                col = col.iloc[:, 0]
+            vix_data = pd.DataFrame({'VIX': col})
 
             # Save to cache
             save_to_pickle(vix_data, cache_file)
